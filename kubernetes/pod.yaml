@@ -9,4 +9,3 @@ spec:
   containers:
     - name: nginx # Name of the container
       image: nginx
-  
