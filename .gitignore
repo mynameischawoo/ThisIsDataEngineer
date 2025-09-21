@@ -55,3 +55,7 @@ wheels/
 # Backup files
 *.bak
 *.backup
+
+# Iceberg / Spark study artifacts
+iceberg/warehouse/
+iceberg/notebooks/.ipynb_checkpoints/
