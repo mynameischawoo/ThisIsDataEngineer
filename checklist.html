@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>회사/팀 만족도 핵심 체크리스트 (16문항)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* ----- 기본 스타일 ----- */
+    :root {
+      --bg: #ffffff;
+      --fg: #111827;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #2563eb;
+      --ok: #059669;       /* 잔류 권장 */
+      --warn: #d97706;     /* 이직 준비 */
+      --danger: #dc2626;   /* 휴식 권장 */
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
+      color: var(--fg);
+      background: var(--bg);
+    }
+    h1 { font-size: 22px; margin: 0 0 6px; }
+    p.desc { color: var(--muted); margin-top: 0; }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 16px 0 24px;
+      background: #fafafa;
+    }
+    .summary-grid {
+      display: grid; gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      margin-top: 8px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 14px;
+      background: #fff;
+    }
+    .kpi { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+    .kpi-val { font-size: 20px; font-weight: 700; }
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .badge.ok { background: var(--ok); }
+    .badge.warn { background: var(--warn); }
+    .badge.danger { background: var(--danger); }
+    .hint { color: var(--muted); font-size: 12px; margin-top: 6px; }
+
+    /* ----- 표 ----- */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    thead th {
+      position: sticky; top: 0;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      font-size: 13px;
+      text-align: center;
+      white-space: nowrap;
+    }
+    tbody td {
+      border-bottom: 1px solid var(--line);
+      padding: 10px 8px;
+      vertical-align: top;
+      font-size: 14px;
+    }
+    tbody tr:hover { background: #fafafa; }
+    td.idx { width: 48px; text-align: center; color: var(--muted); }
+    td.q { width: 48%; }
+    td.opt { text-align: center; width: 7.5%; }
+
+    /* ----- 하단 액션 ----- */
+    .actions {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-top: 12px;
+    }
+    button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 10px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button.primary {
+      background: var(--primary);
+      color: #fff; border-color: var(--primary);
+    }
+    .note { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <!-- 제목/설명 -->
+  <h1>회사/팀 만족도 핵심 체크리스트 (16문항)</h1>
+  <p class="desc">각 문항을 1점(매우 불만족) ~ 5점(매우 만족)으로 선택하세요. 선택할수록 아래 <b>합계/만족도/권고</b>가 자동 계산됩니다.</p>
+
+  <!-- 요약 패널 -->
+  <section class="panel" aria-live="polite">
+    <div class="summary-grid">
+      <div class="card">
+        <div class="kpi">총점 / 최대점</div>
+        <div class="kpi-val"><span id="sum">0</span> / <span id="max">80</span></div>
+      </div>
+      <div class="card">
+        <div class="kpi">만족도(%)</div>
+        <div class="kpi-val"><span id="pct">0</span>%</div>
+      </div>
+      <div class="card">
+        <div class="kpi">응답 진행률</div>
+        <div class="kpi-val"><span id="answered">0</span> / <span id="total">16</span></div>
+        <div class="hint" id="hint">모든 문항에 응답하면 권고 정확도가 높아집니다.</div>
+      </div>
+      <div class="card">
+        <div class="kpi">권고</div>
+        <div class="kpi-val"><span id="recommend" class="badge danger">응답 필요</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 체크리스트 테이블 -->
+  <!--
+    설계 원칙:
+    - 30문항에서 중복/유사 항목을 통합하여 16문항으로 축약
+    - 의사결정에 핵심적인 영역 중심(보상·문화·리더십·성장·프로세스·건강·유연성)
+    - name="q{번호}" 라디오 그룹으로 1~5점 택1
+  -->
+  <table id="checklist">
+    <thead>
+      <tr>
+        <th>번호</th>
+        <th>질문 내용</th>
+        <th>1점</th>
+        <th>2점</th>
+        <th>3점</th>
+        <th>4점</th>
+        <th>5점</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 1. 보상 패키지(연봉·인센티브·복지) -->
+      <tr>
+        <td class="idx">1</td>
+        <td class="q">보상 패키지(연봉·인센티브·복지)는 역할·시장가치 대비 적정한가?</td>
+        <!-- 각 옵션은 같은 name(q1)을 공유 → 라디오 단일선택 -->
+        <td class="opt"><input type="radio" name="q1" value="1" aria-label="1점"></td>
+        <td class="opt"><input type="radio" name="q1" value="2" aria-label="2점"></td>
+        <td class="opt"><input type="radio" name="q1" value="3" aria-label="3점"></td>
+        <td class="opt"><input type="radio" name="q1" value="4" aria-label="4점"></td>
+        <td class="opt"><input type="radio" name="q1" value="5" aria-label="5점"></td>
+      </tr>
+
+      <!-- 2. 팀 분위기·커뮤니케이션 -->
+      <tr>
+        <td class="idx">2</td>
+        <td class="q">팀 분위기는 협력적이고 커뮤니케이션은 투명한가?</td>
+        <td class="opt"><input type="radio" name="q2" value="1"></td>
+        <td class="opt"><input type="radio" name="q2" value="2"></td>
+        <td class="opt"><input type="radio" name="q2" value="3"></td>
+        <td class="opt"><input type="radio" name="q2" value="4"></td>
+        <td class="opt"><input type="radio" name="q2" value="5"></td>
+      </tr>
+
+      <!-- 3. 팀워크·협업 태도 -->
+      <tr>
+        <td class="idx">3</td>
+        <td class="q">팀워크가 좋고, 서로 돕는 협업 태도가 정착되어 있는가?</td>
+        <td class="opt"><input type="radio" name="q3" value="1"></td>
+        <td class="opt"><input type="radio" name="q3" value="2"></td>
+        <td class="opt"><input type="radio" name="q3" value="3"></td>
+        <td class="opt"><input type="radio" name="q3" value="4"></td>
+        <td class="opt"><input type="radio" name="q3" value="5"></td>
+      </tr>
+
+      <!-- 4. 리더십 신뢰·존중(상사 언행 포함) -->
+      <tr>
+        <td class="idx">4</td>
+        <td class="q">상사의 리더십은 신뢰할 수 있고, 언행은 존중적이며 일관적인가?</td>
+        <td class="opt"><input type="radio" name="q4" value="1"></td>
+        <td class="opt"><input type="radio" name="q4" value="2"></td>
+        <td class="opt"><input type="radio" name="q4" value="3"></td>
+        <td class="opt"><input type="radio" name="q4" value="4"></td>
+        <td class="opt"><input type="radio" name="q4" value="5"></td>
+      </tr>
+
+      <!-- 5. 기술 스택·성장 기회 -->
+      <tr>
+        <td class="idx">5</td>
+        <td class="q">기술 스택이 최신/건전하고, 성장·학습 기회가 충분한가?</td>
+        <td class="opt"><input type="radio" name="q5" value="1"></td>
+        <td class="opt"><input type="radio" name="q5" value="2"></td>
+        <td class="opt"><input type="radio" name="q5" value="3"></td>
+        <td class="opt"><input type="radio" name="q5" value="4"></td>
+        <td class="opt"><input type="radio" name="q5" value="5"></td>
+      </tr>
+
+      <!-- 6. 데이터 중심 의사결정 -->
+      <tr>
+        <td class="idx">6</td>
+        <td class="q">중요 의사결정에서 데이터·팩트 기반 논의가 이뤄지는가?</td>
+        <td class="opt"><input type="radio" name="q6" value="1"></td>
+        <td class="opt"><input type="radio" name="q6" value="2"></td>
+        <td class="opt"><input type="radio" name="q6" value="3"></td>
+        <td class="opt"><input type="radio" name="q6" value="4"></td>
+        <td class="opt"><input type="radio" name="q6" value="5"></td>
+      </tr>
+
+      <!-- 7. 업무 강도·워라밸 -->
+      <tr>
+        <td class="idx">7</td>
+        <td class="q">업무 강도와 근무시간이 적정하며 워라밸이 유지되는가?</td>
+        <td class="opt"><input type="radio" name="q7" value="1"></td>
+        <td class="opt"><input type="radio" name="q7" value="2"></td>
+        <td class="opt"><input type="radio" name="q7" value="3"></td>
+        <td class="opt"><input type="radio" name="q7" value="4"></td>
+        <td class="opt"><input type="radio" name="q7" value="5"></td>
+      </tr>
+
+      <!-- 8. 피드백·성과평가 투명성 -->
+      <tr>
+        <td class="idx">8</td>
+        <td class="q">정기적인 피드백과 공정·투명한 성과평가가 운영되는가?</td>
+        <td class="opt"><input type="radio" name="q8" value="1"></td>
+        <td class="opt"><input type="radio" name="q8" value="2"></td>
+        <td class="opt"><input type="radio" name="q8" value="3"></td>
+        <td class="opt"><input type="radio" name="q8" value="4"></td>
+        <td class="opt"><input type="radio" name="q8" value="5"></td>
+      </tr>
+
+      <!-- 9. 멘토링·온보딩·러닝 지원 -->
+      <tr>
+        <td class="idx">9</td>
+        <td class="q">멘토/사수, 온보딩, 교육·러닝 제도가 실효성 있게 제공되는가?</td>
+        <td class="opt"><input type="radio" name="q9" value="1"></td>
+        <td class="opt"><input type="radio" name="q9" value="2"></td>
+        <td class="opt"><input type="radio" name="q9" value="3"></td>
+        <td class="opt"><input type="radio" name="q9" value="4"></td>
+        <td class="opt"><input type="radio" name="q9" value="5"></td>
+      </tr>
+
+      <!-- 10. 프로세스·역할 명확성 -->
+      <tr>
+        <td class="idx">10</td>
+        <td class="q">업무 프로세스·우선순위·역할/책임(R&R)이 명확한가?</td>
+        <td class="opt"><input type="radio" name="q10" value="1"></td>
+        <td class="opt"><input type="radio" name="q10" value="2"></td>
+        <td class="opt"><input type="radio" name="q10" value="3"></td>
+        <td class="opt"><input type="radio" name="q10" value="4"></td>
+        <td class="opt"><input type="radio" name="q10" value="5"></td>
+      </tr>
+
+      <!-- 11. 부서 간 협업·사일로·갈등 해결 -->
+      <tr>
+        <td class="idx">11</td>
+        <td class="q">부서 간 협업이 원활하고, 갈등은 건설적으로 해결되는가?</td>
+        <td class="opt"><input type="radio" name="q11" value="1"></td>
+        <td class="opt"><input type="radio" name="q11" value="2"></td>
+        <td class="opt"><input type="radio" name="q11" value="3"></td>
+        <td class="opt"><input type="radio" name="q11" value="4"></td>
+        <td class="opt"><input type="radio" name="q11" value="5"></td>
+      </tr>
+
+      <!-- 12. 의견 존중·의사결정 참여 -->
+      <tr>
+        <td class="idx">12</td>
+        <td class="q">개인의 의견이 존중되고, 의사결정 과정에 참여할 수 있는가?</td>
+        <td class="opt"><input type="radio" name="q12" value="1"></td>
+        <td class="opt"><input type="radio" name="q12" value="2"></td>
+        <td class="opt"><input type="radio" name="q12" value="3"></td>
+        <td class="opt"><input type="radio" name="q12" value="4"></td>
+        <td class="opt"><input type="radio" name="q12" value="5"></td>
+      </tr>
+
+      <!-- 13. 회사 비전·가치관 적합 -->
+      <tr>
+        <td class="idx">13</td>
+        <td class="q">회사의 비전·핵심 가치가 본인의 가치관과 잘 맞는가?</td>
+        <td class="opt"><input type="radio" name="q13" value="1"></td>
+        <td class="opt"><input type="radio" name="q13" value="2"></td>
+        <td class="opt"><input type="radio" name="q13" value="3"></td>
+        <td class="opt"><input type="radio" name="q13" value="4"></td>
+        <td class="opt"><input type="radio" name="q13" value="5"></td>
+      </tr>
+
+      <!-- 14. 건강 영향(신체·정신) -->
+      <tr>
+        <td class="idx">14</td>
+        <td class="q">회사 생활이 신체·정신 건강에 부정적 영향을 주지 않는가?</td>
+        <td class="opt"><input type="radio" name="q14" value="1"></td>
+        <td class="opt"><input type="radio" name="q14" value="2"></td>
+        <td class="opt"><input type="radio" name="q14" value="3"></td>
+        <td class="opt"><input type="radio" name="q14" value="4"></td>
+        <td class="opt"><input type="radio" name="q14" value="5"></td>
+      </tr>
+
+      <!-- 15. 근무 방식 유연성(재택·자율근무) -->
+      <tr>
+        <td class="idx">15</td>
+        <td class="q">근무 장소·시간 등 일하는 방식의 유연성이 보장되는가?</td>
+        <td class="opt"><input type="radio" name="q15" value="1"></td>
+        <td class="opt"><input type="radio" name="q15" value="2"></td>
+        <td class="opt"><input type="radio" name="q15" value="3"></td>
+        <td class="opt"><input type="radio" name="q15" value="4"></td>
+        <td class="opt"><input type="radio" name="q15" value="5"></td>
+      </tr>
+
+      <!-- 16. 동료 전문성·배움 기회 -->
+      <tr>
+        <td class="idx">16</td>
+        <td class="q">동료들의 전문성 수준이 높아 서로 배울 수 있는가?</td>
+        <td class="opt"><input type="radio" name="q16" value="1"></td>
+        <td class="opt"><input type="radio" name="q16" value="2"></td>
+        <td class="opt"><input type="radio" name="q16" value="3"></td>
+        <td class="opt"><input type="radio" name="q16" value="4"></td>
+        <td class="opt"><input type="radio" name="q16" value="5"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="actions">
+    <button type="button" class="primary" id="exportCsv">CSV 내보내기</button>
+    <button type="button" id="resetAll">모두 초기화</button>
+    <span class="note">※ CSV는 현재 선택한 점수와 합계/만족도를 포함합니다.</span>
+  </div>
+
+  <script>
+    // -----------------------------
+    // 계산 파이프라인
+    // -----------------------------
+    const totalQuestions = 16;            // 총 문항 수
+    const maxPerQuestion = 5;             // 문항당 최대 점수
+    const maxTotal = totalQuestions * maxPerQuestion;
+
+    // KPI 엘리먼트 참조
+    const $sum = document.getElementById('sum');
+    const $max = document.getElementById('max');
+    const $pct = document.getElementById('pct');
+    const $answered = document.getElementById('answered');
+    const $total = document.getElementById('total');
+    const $recommend = document.getElementById('recommend');
+    const $hint = document.getElementById('hint');
+
+    // 초기 표시값
+    $max.textContent = maxTotal;
+    $total.textContent = totalQuestions;
+
+    // 라디오 변경 이벤트 리스너 (이벤트 위임)
+    document.addEventListener('change', (e) => {
+      if (e.target && e.target.matches('input[type="radio"]')) {
+        recalc();
+      }
+    });
+
+    // 합계/퍼센트/권고 재계산
+    function recalc() {
+      let sum = 0;
+      let answered = 0;
+
+      // 각 문항 q1 ~ q16을 순회하며 체크된 값을 합산
+      for (let i = 1; i <= totalQuestions; i++) {
+        const checked = document.querySelector(`input[name="q${i}"]:checked`);
+        if (checked) {
+          sum += Number(checked.value);
+          answered += 1;
+        }
+      }
+
+      // KPI 업데이트
+      $sum.textContent = sum.toString();
+      $answered.textContent = answered.toString();
+
+      // 전체 대비 만족도(%): 미응답 포함 기준(권고 해석의 일관성 유지)
+      const pct = Math.round((sum / maxTotal) * 100);
+      $pct.textContent = isNaN(pct) ? '0' : pct.toString();
+
+      // 권고 판단 로직 (임계값은 퍼센트 기준 → 문항 수 변경에도 자동 적응)
+      // ≥80%: 잔류 권장 / 55~79%: 이직 준비 권장 / <55%: 퇴사 후 휴식 권장
+      let badgeClass = 'danger';
+      let text = '응답 필요';
+
+      if (answered === 0) {
+        badgeClass = 'danger'; text = '응답 필요';
+      } else if (pct >= 80) {
+        badgeClass = 'ok'; text = '잔류 권장';
+      } else if (pct >= 55) {
+        badgeClass = 'warn'; text = '이직 준비 권장';
+      } else {
+        badgeClass = 'danger'; text = '퇴사 후 휴식 권장';
+      }
+
+      $recommend.className = `badge ${badgeClass}`;
+      $recommend.textContent = text;
+
+      // 안내 문구: 미응답이 있으면 정확도 경고
+      if (answered < totalQuestions) {
+        $hint.textContent = '모든 문항에 응답하면 권고 정확도가 높아집니다.';
+      } else {
+        $hint.textContent = '모든 문항 응답 완료! 결과를 참고해 의사결정에 활용하세요.';
+      }
+    }
+
+    // 초기화 버튼: 모든 라디오 선택 해제 후 재계산
+    document.getElementById('resetAll').addEventListener('click', () => {
+      document.querySelectorAll('input[type="radio"]').forEach((el) => { el.checked = false; });
+      recalc();
+    });
+
+    // CSV 내보내기: 현재 선택 점수와 KPI를 CSV로 다운로드
+    document.getElementById('exportCsv').addEventListener('click', () => {
+      const rows = [];
+      rows.push(['번호', '질문', '점수']);
+
+      // 질문 텍스트와 선택 점수 수집
+      for (let i = 1; i <= totalQuestions; i++) {
+        const qText = document.querySelector(`tbody tr:nth-child(${i}) td.q`).textContent.trim();
+        const checked = document.querySelector(`input[name="q${i}"]:checked`);
+        const val = checked ? Number(checked.value) : '';
+        rows.push([i, qText, val]);
+      }
+
+      // KPI(합계/만족도/권고) 추가
+      rows.push([]);
+      rows.push(['총점', document.getElementById('sum').textContent, '']);
+      rows.push(['최대점', document.getElementById('max').textContent, '']);
+      rows.push(['만족도(%)', document.getElementById('pct').textContent, '']);
+      rows.push(['권고', document.getElementById('recommend').textContent, '']);
+
+      // CSV 직렬화
+      const csv = rows.map(r =>
+        r.map(x => {
+          const s = String(x ?? '');
+          return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+        }).join(',')
+      ).join('\n');
+
+      // 다운로드 트리거
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'satisfaction_checklist.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    // 첫 렌더 시 KPI 초기화
+    recalc();
+  </script>
+</body>
+</html>
