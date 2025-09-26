@@ -1,0 +1,39 @@
+syntax = "proto3";
+package person.v1;
+
+import "google/protobuf/timestamp.proto";
+
+// 사람 기본 정보 (v1)
+// 필드 번호는 절대 재사용하지 않도록 주의합니다.
+message Person {
+  int32 id = 1;                       // 고유 ID (음수 사용 지양)
+  string name = 2;                     // 이름
+  Gender gender = 3;                   // 성별 Enum
+  repeated string emails = 4;          // 이메일 목록
+  Address primary_address = 5;         // 기본 주소
+  repeated Address addresses = 6;      // 추가 주소 목록
+  map<string, string> attributes = 7;  // 사용자 속성 (태그성 key/value)
+  google.protobuf.Timestamp created_at = 8; // 생성 시각 (UTC)
+
+  // 서로 배타적인 연락 수단(oneof). 둘 중 1개만 set 가능.
+  oneof contact {
+    string mobile = 9;
+    string telephone = 10;
+  }
+}
+
+// Enum 은 0 값을 반드시 정의 (proto3 규칙)
+enum Gender {
+  GENDER_UNSPECIFIED = 0;
+  MALE = 1;
+  FEMALE = 2;
+  OTHER = 3;
+}
+
+message Address {
+  string line1 = 1;
+  string line2 = 2;
+  string city = 3;
+  string country = 4;
+}
+
