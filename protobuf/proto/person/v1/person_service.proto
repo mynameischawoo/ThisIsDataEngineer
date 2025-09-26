@@ -1,0 +1,44 @@
+syntax = "proto3";
+package person.v1;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+import "person/v1/person.proto";
+
+// Person 리소스 CRUD + 스트리밍 예시 서비스
+service PersonService {
+  // 단건 조회 (Unary)
+  rpc GetPerson(GetPersonRequest) returns (Person) {}
+
+  // 목록 조회 (서버 스트리밍) - paging 간단 예시
+  rpc ListPersons(ListPersonsRequest) returns (stream Person) {}
+
+  // 생성 (Unary)
+  rpc CreatePerson(CreatePersonRequest) returns (Person) {}
+
+  // 업데이트 (Unary)
+  rpc UpdatePerson(UpdatePersonRequest) returns (Person) {}
+
+  // 서버 스트리밍: 주기적으로 Person 전체를 push (예시)
+  rpc StreamPersons(StreamPersonsRequest) returns (stream Person) {}
+
+  // 양방향 스트리밍: 클라이언트가 Person 을 보내면 서버가 동일 ID 에 타임스탬프만 갱신해 echo
+  rpc Chat(stream Person) returns (stream Person) {}
+}
+
+message GetPersonRequest { int32 id = 1; }
+
+message ListPersonsRequest {
+  int32 page_size = 1;               // 0 또는 미지정 시 기본값 서버 적용
+  string page_token = 2;             // 다음 페이지 토큰
+}
+
+message CreatePersonRequest { Person person = 1; }
+
+message UpdatePersonRequest { Person person = 1; }
+
+message StreamPersonsRequest {
+  int32 interval_seconds = 1;        // 0 이면 서버 기본값
+  int32 max_messages = 2;            // 0 이면 무한
+}
+
