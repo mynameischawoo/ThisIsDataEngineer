@@ -1,0 +1,55 @@
+{
+    "format-version": 2,
+    "table-uuid": "c65bf263-e8ca-4ab0-9d02-e23affe0530d",
+    "location": "s3://warehouse/default/my_table",
+    "last-sequence-number": 0,
+    "last-updated-ms": 1758971050467,
+    "last-column-id": 2,
+    "current-schema-id": 0,
+    "schemas": [
+        {
+            "type": "struct",
+            "schema-id": 0,
+            "fields": [
+                {
+                    "id": 1,
+                    "name": "id",
+                    "required": false,
+                    "type": "long"
+                },
+                {
+                    "id": 2,
+                    "name": "name",
+                    "required": false,
+                    "type": "string"
+                }
+            ]
+        }
+    ],
+    "default-spec-id": 0,
+    "partition-specs": [
+        {
+            "spec-id": 0,
+            "fields": []
+        }
+    ],
+    "last-partition-id": 999,
+    "default-sort-order-id": 0,
+    "sort-orders": [
+        {
+            "order-id": 0,
+            "fields": []
+        }
+    ],
+    "properties": {
+        "owner": "root",
+        "write.parquet.compression-codec": "zstd"
+    },
+    "current-snapshot-id": -1,
+    "refs": {},
+    "snapshots": [],
+    "statistics": [],
+    "partition-statistics": [],
+    "snapshot-log": [],
+    "metadata-log": []
+}
