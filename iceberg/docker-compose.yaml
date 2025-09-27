@@ -46,6 +46,8 @@ services:
       iceberg_net:
         aliases:
           - warehouse.minio
+    volumes:
+      - ./warehouse:/data
     ports:
       - 9001:9001
       - 9000:9000
