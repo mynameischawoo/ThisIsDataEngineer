@@ -1,0 +1,12 @@
+# 가상환경
+.venv/
+
+# 생성 코드
+/generated/
+
+# 캐시/빌드
+__pycache__/
+*.pyc
+.mypy_cache/
+.pytest_cache/
+
