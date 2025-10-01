@@ -8,6 +8,9 @@ pyenv.activate.local.protobuf_env:
 pyenv.check.versions:
 	pyenv versions
 
+pip.install.requirements:
+	python3 -m pip install --upgrade pip
+	python3 -m pip install -r requirements.txt
 
 
 # pyenv virtualenv-delete -f protobuf_env
