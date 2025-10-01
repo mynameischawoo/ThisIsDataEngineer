@@ -1,1 +1,2 @@
-
+protobuf==6.32.1
+types-protobuf==6.32.1.20250918
