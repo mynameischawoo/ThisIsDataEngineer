@@ -8,10 +8,15 @@ vscode-icons 설치하기(EXPLORER 의 디렉토리, 파일 아이콘 적용)
 
 ![vscode-icons](./images/vscode_extentions_vscode-icons.png)
 
-Makefile Tools 설치하기
+Makefile Tools 설치하기(Makefile 문법 인식 등)
 
 ![maekfile tools](./images/vscode_extention_makefile_tools.png)
 
+Auto-Open Markdown Preview 설치하기(README.md 미리보기 자동 설정)
+
+![auto-open-markdown-preview](./images/vscode_extention_auto-open-markdown-preview.png)
+
+<br>
 
 ## Makefile 사용 가이드
 ```bash
