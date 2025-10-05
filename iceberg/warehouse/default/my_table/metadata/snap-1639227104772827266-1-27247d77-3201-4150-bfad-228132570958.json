@@ -1,0 +1,17 @@
+{"data":[{
+  "manifest_path" : "s3://warehouse/default/my_table/metadata/27247d77-3201-4150-bfad-228132570958-m0.avro",
+  "manifest_length" : 7054,
+  "partition_spec_id" : 0,
+  "content" : 0,
+  "sequence_number" : 1,
+  "min_sequence_number" : 1,
+  "added_snapshot_id" : 1639227104772827266,
+  "added_files_count" : 2,
+  "existing_files_count" : 0,
+  "deleted_files_count" : 0,
+  "added_rows_count" : 2,
+  "existing_rows_count" : 0,
+  "deleted_rows_count" : 0,
+  "partitions" : [ ],
+  "key_metadata" : null
+}]}
