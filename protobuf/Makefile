@@ -1,3 +1,19 @@
+PROTOBUF_IMAGE_TAG = v1.0.0
+
+docker.build.local:
+	docker build \
+		--platform linux/amd64 \
+		-t python_proto:$(PROTOBUF_IMAGE_TAG) .
+
+docker.run:
+	docker run -it --rm \
+		--platform linux/amd64 \
+		--name python_proto_container \
+		-v ${PWD}:/app \
+		python_proto:$(PROTOBUF_IMAGE_TAG) \
+		bash
+
+
 pyenv.install.protobuf_env:
 	pyenv install 3.12.10
 	pyenv virtualenv 3.12.10 protobuf_env
