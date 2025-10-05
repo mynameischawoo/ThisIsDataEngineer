@@ -20,8 +20,7 @@ docker-compose -f docker-compose.yaml up -d
 
 * Verify Services
 ```bash
-
-  http://localhost:8888      - jupyter notebook
+  http://localhost:8888/tree/notebooks      - jupyter notebook
   http://localhost:9001      - minio
 ```
 * Jupyter notebook(http://localhost:8888/)
