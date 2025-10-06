@@ -1,0 +1,19 @@
+[
+    {
+      "event_ts": "2025-04-24T15:30:00Z",
+      "user_id": 101,
+      "payload": {
+        "device": "mobile",
+        "country": "IN"
+      }
+    },
+    {
+      "event_ts": "2025-04-25T09:12:00Z",
+      "user_id": 102,
+      "payload": {
+        "device": "web",
+        "country": "US"
+      }
+    }
+  ]
+  
