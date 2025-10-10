@@ -3,6 +3,8 @@
 - Iceberg hands-on 학습 내용을 기록한다.
 - 학습한 내용은 `iceberg/notebooks` 경로에 jupyter notebook 형태로 기록한다.
 
+<br>
+
 ## Udemy 
 * 강의 이름: Apache Iceberg: The Complete Masterclass (Hands-On)
  
