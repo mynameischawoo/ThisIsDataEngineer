@@ -1,4 +1,9 @@
+import io
+import json
 import boto3
+import fastavro
+
+from fastavro import reader as avro_reader
 
 def get_metadata(file_name: str,
                 endpoint_url: str="http://minio:9000",
@@ -21,3 +26,10 @@ def get_metadata(file_name: str,
         Key=f"{database}/{table}/metadata/{file_name}"
     )
     return obj
+
+def print_avro_item(obj: dict) -> fastavro._read.reader:
+    bio = io.BytesIO(obj["Body"].read())
+    avro_rdr = avro_reader(bio)
+    for manifest in avro_rdr:
+        print(json.dumps(manifest, indent=2, ensure_ascii=False))
+    return avro_rdr
