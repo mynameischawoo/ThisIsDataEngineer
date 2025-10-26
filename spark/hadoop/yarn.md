@@ -1,4 +1,4 @@
-# Hadoop
+# Hadoop - YARN
 > Spark 학습 과정에서 같이 공부한 Hadoop, YARN 내용을 기록한다.
 
 ## What is Hadoop?
