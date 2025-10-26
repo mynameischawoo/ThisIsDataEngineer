@@ -93,7 +93,7 @@ flowchart TD
 
 * Application Master 컨테이너는 제출한 애플리케이션 코드를 실행한다.
 * 이 때, 컨테이너는 CPU, Memory 리소스 집합체를 의미한다.
-* 애플리케이션을 제출하고 실행하는 시퀀스는 아래와 같다.
+### Application submission and execution sequence
 
 <br/>
 
