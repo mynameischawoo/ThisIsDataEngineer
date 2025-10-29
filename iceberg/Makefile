@@ -1,4 +1,4 @@
-start.docker.compose.for.iceberg: open.jupyter.web open.min.io.web open.spark.history.server.web
+start.docker.compose.for.iceberg:
 	# Run the docker-compose file for iceberg
 	@docker-compose -f docker-compose.yaml up -d && \
 	sleep 20 && \
