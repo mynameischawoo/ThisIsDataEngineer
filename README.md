@@ -12,11 +12,12 @@
 | [Makefile Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.makefile-tools) | Makefile 문법 인식 등 |
 | [Auto-Open Markdown Preview](https://marketplace.visualstudio.com/items?itemName=hnw.vscode-auto-open-markdown-preview) | README.md 미리보기 자동 설정 |
 | [Markdown Preview Mermaid Support](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid) | Adds Mermaid diagram and flowchart support to VS Code's builtin markdown preview |
+| [vscode-makefile-term](https://marketplace.visualstudio.com/items?itemName=lfm.vscode-makefile-term) | editor에서 make goal 직접 실행 가능하도록 지원 |
 
 
 <br>
 
-## Makefile 사용 가이드
+## Makefile Guide
 ```bash
 # brew 를 이용해서 make 설치하기
 $ brew install make

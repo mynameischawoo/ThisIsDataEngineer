@@ -10,7 +10,7 @@ services:
       - rest
       - minio
     volumes:
-      - ./warehouse:/home/iceberg/warehouse
+      # - ./warehouse:/home/iceberg/warehouse
       - ./notebooks:/home/iceberg/notebooks/notebooks
       - ./images:/home/iceberg/notebooks/images
     environment:

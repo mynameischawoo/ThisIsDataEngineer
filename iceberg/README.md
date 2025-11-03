@@ -1,42 +1,28 @@
 # Iceberg study
 
 - Iceberg hands-on 학습 내용을 기록한다.
-- 학습한 내용은 `iceberg/notebooks` 경로에 jupyter notebook 형태로 기록한다.
+- 학습한 내용은 [`iceberg/notebooks`](./notebooks) 경로에 jupyter notebook 형태로 기록한다.
 
 <br>
 
 ## Udemy 
-* 강의 이름: Apache Iceberg: The Complete Masterclass (Hands-On)
+* Apache Iceberg: The Complete Masterclass (Hands-On)
  
 <br>
 
-## iceberg-spark-minio 환경 구성 방법
-> - Spark, Iceberg, MinIo, Jupyter 를 이용한 Spark-Iceberg 실습 환경 구성
-> - 원본 git 저장소: https://github.com/suraj-darekar/iceberg-spark-minio.git
+## iceberg-spark-minio 환경 구성
+- 원본 git 저장소: https://github.com/suraj-darekar/iceberg-spark-minio.git
 
-<br>
 
-### Steps to Install 
-* CLI Commands
+#### Run docker compose(use. [`Makefile`](./Makefile))
 ```bash
-# docker compose 실행
-$ docker-compose -f docker-compose.yaml up -d
-또는
-# make goal 실행
+# 해당 make goal을 실행하여 학습에 필요한 컴포넌트를 구성할 수 있다.
 $ make start.docker.compose.for.iceberg
 ```
 
-* Verify Services
-```bash
-  http://localhost:8888/tree/notebooks      - jupyter notebook
-  http://localhost:9001      - minio
-  http://localhost:18080    - spark history server
-```
-* Jupyter notebook(http://localhost:8888/)
-* Spark history server(http://localhost:18080/)
-
-* MinIO(http://localhost:9001/)
-> ID: admin / Password: password
+#### Jupyter notebook(http://localhost:8888/)
+#### Spark history server(http://localhost:18080/)
+#### MinIO(http://localhost:9001/, ID: admin / Password: password)
 
 ![minio_login_page.png](images/minio_login_page.png)
 ![minio_home.png](images/minio_home.png)
