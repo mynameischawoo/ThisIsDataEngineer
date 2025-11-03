@@ -1,16 +1,12 @@
 # Spark
-> Spark 학습 내용 기록하기
-
-## Udemy 강의
-- [Apache Spark Programming in Python for beginners](https://www.udemy.com/course/apache-spark-programming-in-python-for-beginners/)
-- [Taming Big Data with Apache Spark 4 and Python - Hands On!](https://www.udemy.com/course/taming-big-data-with-apache-spark-hands-on/?couponCode=KEEPLEARNING)
+> Spark 학습 과정에서 Spark 소개 내용을 기록한다.
 
 ## What is Apache Spark?
 - 데이터 레이크 위에서 실행되는 **분산 데이터 처리 프레임워크**
 - **클러스터 관리 / 스토리지 제공 X** → 외부 시스템에 의존
   - 클러스터 매니저: YARN, Kubernetes, Mesos, Standalone
   - 스토리지: HDFS, S3, ADLS, GCS, Cassandra 등
-- Spark는 오직 **데이터 처리(Compute Engine)** 에 집중
+- Spark는 오직 **데이터 처리(Compute Engine)**에 집중
 
 
 
@@ -56,11 +52,24 @@ flowchart TD
 | **GraphX**                  | 그래프 처리 라이브러리                    | 알고리즘 구현 가능                   |
 
 
+
+## Spark가 인기 있는 이유
+
+1. **분산 환경 추상화**
+   → SQL/DF/RDD로 개발자가 분산 복잡성을 몰라도 됨
+2. **통합 데이터 처리**
+   → 배치, 스트리밍, ML, 그래프를 하나의 엔진에서
+3. **간결한 코드 & 생태계**
+   → Hadoop MapReduce 대비 코드 단순, 커뮤니티 활발
+
+
+
 ## Databricks란?
 
 * Spark 원 개발자들이 만든 회사/제품
-* Spark를 클라우드 네이티브(AWS, Azure, GCP 지원)로 쉽게 사용 가능
+* Spark를 클라우드 네이티브로 쉽게 사용 가능
 
+  * AWS, Azure, GCP 지원
 * **핵심 기능**
 
   * 클러스터 자동 생성/종료 (운영 부담 ↓)
@@ -69,3 +78,4 @@ flowchart TD
   * **Photon 엔진**: DWH급 SQL 성능
   * **MLflow**: 머신러닝 실험/배포/모델 관리
   * 노트북 & 협업 워크스페이스 (Git 연동 지원)
+
